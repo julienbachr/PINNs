@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 # Définition du réseau de neurones
 class PINN(nn.Module):
-    def __init__(self, n_hidden=3, n_neurons=20):
+    def __init__(self, n_hidden=3, n_neurons=20): #3 couches et 20 neurones par couche, suffisant pour ce cas simple
         super(PINN, self).__init__()
         layers = []
         input_dim = 2  # (x, y)
@@ -19,7 +19,7 @@ class PINN(nn.Module):
         
         for _ in range(n_hidden - 1):
             layers.append(nn.Linear(n_neurons, n_neurons))
-            layers.append(nn.Sigmoid())
+            layers.append(nn.Sigmoid()) # fonction d'activation
         
         layers.append(nn.Linear(n_neurons, output_dim))
         self.model = nn.Sequential(*layers)
@@ -44,7 +44,7 @@ def physical_loss(model, interior_points):
     return torch.mean((u_xx + u_yy) ** 2)
 
 # Entraînement du modèle
-def train(model, optimizer, boundary_points, boundary_values, interior_points, epochs=10000):
+def train(model, optimizer, boundary_points, boundary_values, interior_points, epochs=10000): #10000 epochs, peut être modifié
     for epoch in range(epochs):
         optimizer.zero_grad()
         loss_b = boundary_loss(model, boundary_points, boundary_values)
@@ -67,7 +67,7 @@ print("interiorpoints", interior_points)
 
 # Initialisation et entraînement du modèle
 model = PINN()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
+optimizer = optim.Adam(model.parameters(), lr=0.01) # lr = learning rate, peut être modifié
 train(model, optimizer, boundary_points, boundary_values, interior_points)
 
 # Visualisation des résultats
@@ -84,7 +84,7 @@ def plot_solution(model):
     plt.colorbar(label='Potential u(x, y)')
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.title('Solution de léquation de Laplace')
+    plt.title('Solution de l\'équation de Laplace 2D')
     plt.show()
 
 # Affichage de la solution
